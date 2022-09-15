@@ -13,17 +13,68 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-db.personajes = require("./Personajes")(sequelize, Sequelize);
-db.poderes = require("./Poderes")(sequelize, Sequelize);
-db.usuarios = require("./Usuarios")(sequelize, Sequelize);
+db.autor = require("./autor")(sequelize, Sequelize);
+db.museo = require("./museo")(sequelize, Sequelize);
+db.obra_accesibilidad = require("./obra_accesibilidad")(sequelize, Sequelize);
+db.obra = require("./obra")(sequelize, Sequelize);
+db.plano_museo = require("./plano_museo")(sequelize, Sequelize);
+db.sala_obra = require("./sala_obra")(sequelize, Sequelize);
+db.sala = require("./sala")(sequelize, Sequelize);
+db.tipo_accesibilidad = require("./tipo_accesibilidad")(sequelize, Sequelize);
+db.tema = require("./tema")(sequelize, Sequelize);
+db.turno = require("./turno")(sequelize, Sequelize);
+db.usuarios = require("./usuarios")(sequelize, Sequelize);
+db.visita_guiada = require("./visita_guiada")(sequelize, Sequelize);
 
-db.personajes.hasMany(db.poderes,{
-    foreignKey : 'id_personaje',
+db.museo.hasMany(db.plano_museo,{
+    foreignKey : 'id_museo',
 });
-db.poderes.belongsTo(db.personajes,{
-    foreignKey : 'id',
+
+db.museo.hasMany(db.sala,{
+    foreignKey : 'id_museo',
+});
+
+db.museo.hasMany(db.visita_guiada,{
+    foreignKey : 'id_museo',
+});
+
+db.visita_guiada.hasMany(db.turno,{
+    foreignKey : 'id_visita',
+});
+
+db.usuario.hasMany(db.turnos,{
+    foreignKey : 'id_usuario',
+});
+
+db.sala.hasMany(db.sala_obra,{
+    foreignKey : 'id_sala',
 });
 
 
+db.sala_obra.hasMany(db.obra,{
+    foreignKey : 'id_obra',
+});
+
+db.obra.hasMany(db.obra_accesibilidad,{
+    foreignKey : 'id_obra',
+});
+
+db.tema.hasMany(db.obra,{
+    foreignKey : 'id_tema',
+});
+
+
+db.autor.hasMany(db.obra,{
+    foreignKey : 'id_autor',
+});
+
+db.tipo_accesibilidad.hasMany(db.obra_accesibilidad,{
+    foreignKey : 'id_tipo_accesibilidad',
+});
+
+
+db.tipo_accesibilidad.hasMany(db.usuarios,{
+    foreignKey : 'id_tipo_accesibilidad',
+});
 
 module.exports = db;
